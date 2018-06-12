@@ -1,1 +1,16 @@
-# template
+<h1>
+  Gulp template
+</h1>
+<p>
+  Установка: <code>npm i</code>.
+</p>
+<h2>
+  К прочтению / ознакомлению
+</h2>
+<ul>
+<li><a href="http://nicothin.github.io/idiomatic-pre-CSS/" rel="nofollow">Как работать с CSS-препроцессорами и БЭМ</a></li>
+<li><a href="https://github.com/nicothin/web-development/tree/master/bash">Шпаргалка по bash</a></li>
+<li><a href="https://github.com/nicothin/web-development/tree/master/git">Шпаргалка по консольным командам Git</a></li>
+<li><a href="http://nicothin.github.io/sublime-text/sublime-text-3-hotkeys.html" rel="nofollow">Шпаргалка ниндзя Sublime Text 3</a></li>
+</ul>
+
