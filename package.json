@@ -1,8 +1,8 @@
 {
-  "name": "loftblog-automate-demo",
+  "name": "odintsov-gulp-template",
   "version": "1.0.0",
-  "description": "Демо автоматизации с gulp 4",
-  "author": "Nikolay Gromov",
+  "description": "Автоматизации с gulp 4",
+  "author": "Roman Odintsov",
   "license": "ISC",
   "scripts": {
     "start": "gulp"
