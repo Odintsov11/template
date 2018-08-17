@@ -23,6 +23,10 @@ const browserSync = require('browser-sync').create();
 const svgstore = require('gulp-svgstore');
 const svgmin = require('gulp-svgmin');
 
+const imagemin = require('gulp-imagemin');
+
+const changed = require('gulp-changed');
+
 const paths =  {
   src: './src/',              // paths.src
   build: './build/'           // paths.build
@@ -42,11 +46,23 @@ function styles() {
     .pipe(rename({ suffix: ".min" }))
     .pipe(sourcemaps.write('/'))
     .pipe(gulp.dest(paths.build + 'css/'))
-    .pipe(cleanCSS())
-    .pipe(rename('main.min.css'))
-    .pipe(gulp.dest(paths.build + 'css/'));
 }
-
+function imgMin(){
+  return gulp.src(paths.src + 'img/*')
+  .pipe(changed(paths.build + 'img/'))
+  .pipe(imagemin([
+    imagemin.gifsicle({interlaced: true}),
+    imagemin.jpegtran({progressive: true}),
+    imagemin.optipng({optimizationLevel: 5}),
+    imagemin.svgo({
+        plugins: [
+            {removeViewBox: true},
+            {cleanupIDs: false}
+        ]
+    })
+]))
+  .pipe(gulp.dest(paths.build + 'img/'));
+}
 function svgSprite() {
   return gulp.src(paths.src + 'svg/*.svg')
     .pipe(svgmin(function (file) {
@@ -86,9 +102,10 @@ function clean() {
 }
 
 function watch() {
-  gulp.watch(paths.src + 'scss/**/*.scss', styles);
-  gulp.watch(paths.src + 'js/**/*.js', scripts);
+  gulp.watch(paths.src + 'scss/*.scss', styles);
+  gulp.watch(paths.src + 'js/*.js', scripts);
   gulp.watch(paths.src + '*.html', htmls);
+  gulp.watch(paths.src + 'img/*', imgMin);
 }
 
 function serve() {
@@ -103,6 +120,7 @@ function serve() {
 exports.styles = styles;
 exports.scripts = scripts;
 exports.htmls = htmls;
+exports.imgMin = imgMin;
 exports.svgSprite = svgSprite;
 exports.clean = clean;
 exports.watch = watch;
@@ -112,11 +130,11 @@ gulp.task('build', gulp.series(
   // styles,
   // scripts,
   // htmls
-  gulp.parallel(styles, svgSprite, scripts, htmls)
+  gulp.parallel(styles,imgMin, svgSprite, scripts, htmls)
 ));
 
 gulp.task('default', gulp.series(
   clean,
-  gulp.parallel(styles, svgSprite, scripts, htmls),
+  gulp.parallel(styles,imgMin, svgSprite, scripts, htmls),
   gulp.parallel(watch, serve)
 ));

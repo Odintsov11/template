@@ -1,0 +1,62 @@
+html {
+  font-size: 16px; 
+
+  @include tablets {
+    font-size: 15px;
+  }
+
+  @include phones {
+    font-size: 13px;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-size: rem(16px);
+  line-height: 1.42;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 300;
+  background: $bg;
+  color:$text;
+}
+// tag styles reset
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  font-weight: normal;
+  font-weight: 500;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+ul, li{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+}
+a{
+  text-decoration: none;
+  color:inherit;
+}
+
+* {
+  box-sizing: border-box;
+  user-select: none;
+  outline: none;
+}

@@ -1,4 +1,26 @@
-@import 'variables.scss';
-@import 'mixins/*.scss';
+//colors
+$bg:#999;
+$text:#343434;
 
-@import 'global.scss';
+// resolutions
+$desktop: 1200px;
+$laptop: 992px;
+$tablets: 768px;
+$mobile: 578px;
+$phones: 480px;
+
+//normalize
+@import "mixins/normalize.scss";
+
+// media
+@import "mixins/media";
+
+// setups
+@import "mixins/mixins";
+@import "mixins/layout";
+
+// blocks
+@import "blocks/header.scss";
+
+
+
