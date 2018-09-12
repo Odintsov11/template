@@ -27,9 +27,9 @@ const imagemin = require('gulp-imagemin');
 
 const changed = require('gulp-changed');
 
-const paths =  {
+const paths = {
   src: './src/',              // paths.src
-  build: './build/'           // paths.build
+  build: './build/',          // paths.build     
 };
 
 function styles() {
@@ -40,28 +40,28 @@ function styles() {
     .pipe(sass()) // { outputStyle: 'compressed' }
     .pipe(groupMediaQueries())
     .pipe(postcss([
-      autoprefixer({browsers: ['last 9 version']}),
+      autoprefixer({ browsers: ['last 9 version'] }),
     ]))
     .pipe(cleanCSS())
     .pipe(rename({ suffix: ".min" }))
     .pipe(sourcemaps.write('/'))
     .pipe(gulp.dest(paths.build + 'css/'))
 }
-function imgMin(){
+function imgMin() {
   return gulp.src(paths.src + 'img/*')
-  .pipe(changed(paths.build + 'img/'))
-  .pipe(imagemin([
-    imagemin.gifsicle({interlaced: true}),
-    imagemin.jpegtran({progressive: true}),
-    imagemin.optipng({optimizationLevel: 5}),
-    imagemin.svgo({
+    .pipe(changed(paths.build + 'img/'))
+    .pipe(imagemin([
+      imagemin.gifsicle({ interlaced: true }),
+      imagemin.jpegtran({ progressive: true }),
+      imagemin.optipng({ optimizationLevel: 5 }),
+      imagemin.svgo({
         plugins: [
-            {removeViewBox: true},
-            {cleanupIDs: false}
+          { removeViewBox: true },
+          { cleanupIDs: false }
         ]
-    })
-]))
-  .pipe(gulp.dest(paths.build + 'img/'));
+      })
+    ]))
+    .pipe(gulp.dest(paths.build + 'img/'));
 }
 function svgSprite() {
   return gulp.src(paths.src + 'svg/*.svg')
@@ -78,6 +78,15 @@ function svgSprite() {
     .pipe(rename('sprite-svg.svg'))
     .pipe(gulp.dest(paths.build + 'img/'));
 }
+function modules() {
+  return gulp.src([
+    'node_modules/jquery/dist/jquery.min.js',
+    'node_modules/slick-carousel/slick/slick.min.js'
+  ])
+    .pipe(concat('libs.min.js'))
+    .pipe(gulp.dest(paths.src + 'libs/'))
+    .pipe(gulp.dest(paths.build + 'js/'))
+}
 
 function scripts() {
   return gulp.src(paths.src + 'js/*.js')
@@ -89,6 +98,7 @@ function scripts() {
     .pipe(concat('script.min.js'))
     .pipe(gulp.dest(paths.build + 'js/'))
 }
+
 
 function htmls() {
   return gulp.src(paths.src + '*.html')
@@ -102,10 +112,10 @@ function clean() {
 }
 
 function watch() {
-  gulp.watch(paths.src + 'scss/*.scss', styles);
+  gulp.watch(paths.src + 'scss/**/*.scss', styles);
   gulp.watch(paths.src + 'js/*.js', scripts);
   gulp.watch(paths.src + '*.html', htmls);
-  gulp.watch(paths.src + 'img/*', imgMin);
+  gulp.watch(paths.src + 'img/**/*', imgMin);
 }
 
 function serve() {
@@ -124,17 +134,18 @@ exports.imgMin = imgMin;
 exports.svgSprite = svgSprite;
 exports.clean = clean;
 exports.watch = watch;
+exports.modules = modules;
 
 gulp.task('build', gulp.series(
   clean,
   // styles,
   // scripts,
   // htmls
-  gulp.parallel(styles,imgMin, svgSprite, scripts, htmls)
+  gulp.parallel(styles, imgMin, svgSprite, scripts, htmls, modules)
 ));
 
 gulp.task('default', gulp.series(
   clean,
-  gulp.parallel(styles,imgMin, svgSprite, scripts, htmls),
+  gulp.parallel(styles, imgMin, svgSprite, scripts, htmls, modules),
   gulp.parallel(watch, serve)
 ));
